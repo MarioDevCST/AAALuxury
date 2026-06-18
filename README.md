@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## WebCoches
 
-## Getting Started
+- Landing en `Next.js` preparada para cargar vehículos desde `Firebase Firestore`.
+- Si no hay credenciales o la colección está vacía, la web usa un fallback local para no romperse.
 
-First, run the development server:
+## Arranque
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Firebase
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Copia `firebase.env.example` a `.env.local`
+2. Rellena tus credenciales de Firebase
+3. Crea colecciones en Firestore llamadas `vehicles`, `brands` y `models`, o cambia las variables `NEXT_PUBLIC_FIREBASE_*_COLLECTION`
+4. Activa `Email/Password` en `Firebase Authentication`
+5. Crea un usuario administrador, por ejemplo `admin@admin.com`
+6. Reinicia el servidor
 
-## Learn More
+```bash
+cp firebase.env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Estructura esperada en Firestore
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Cada documento de la colección puede tener estos campos:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```ts
+{
+  brand: "Porsche",
+  model: "911",
+  title: "PORSCHE 911 992 CARRERA CABRIO",
+  priceEUR: 149000,
+  fuel: "Gasolina",
+  month: "05",
+  year: 2020,
+  km: 21900,
+  transmission: "Automático",
+  iva: "IVA Deducible",
+  imageSrc: "/o-url-de-la-imagen.jpg"
+}
+```
 
-## Deploy on Vercel
+También se aceptan alias comunes como `marca`, `modelo`, `titulo`, `precio`, `combustible`, `mes`, `anio`, `kilometros`, `cambio`, `imageUrl` o `foto`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Archivos clave
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/lib/firebase.ts`: inicialización del cliente Firebase
+- `src/lib/vehicle-data.ts`: lectura y normalización de datos desde Firestore
+- `src/lib/brand-data.ts`: lectura y escritura de marcas en Firestore
+- `src/lib/model-data.ts`: lectura y escritura de modelos en Firestore
+- `src/lib/vehicles.ts`: tipos, helpers y fallback local
+- `src/components/Landing.tsx`: uso de los datos en la landing
+- `src/app/admin/coches/nuevo/page.tsx`: formulario de alta de coches
+
+## Comportamiento actual
+
+- Con credenciales válidas + colección con datos: carga desde Firestore
+- Sin credenciales o si Firestore falla: usa datos locales de respaldo
+- Si en el formulario público introduces `Nombre = admin` y `E-mail = admin@admin.com`, se abre el login interno secreto
+- El área `/admin` requiere una sesión válida de Firebase Auth y está restringida al email `admin@admin.com`
+- Las marcas creadas en `/admin` se guardan en la colección `brands` y alimentan el `select` de marcas de la landing
+- Los modelos se guardan en `models` vinculados a una marca y el `select` de modelos solo muestra los asociados a la marca elegida
+- Desde `/admin/coches/nuevo` puedes crear vehículos en Firestore usando marcas y modelos ya cargados
