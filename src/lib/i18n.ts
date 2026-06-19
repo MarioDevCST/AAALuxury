@@ -121,7 +121,7 @@ export const messages: Record<Language, Messages> = {
     dream: {
       title: "TE ENCONTRAMOS EL COCHE DE TUS SUEÑOS",
       description:
-        "Si estás buscando el coche de tus sueños, no busques más allá de Iconic Motor Gallery. Somos el concesionario de compra y venta de coches de lujo más importante de España que se dedica a encontrar el vehículo perfecto para ti. Sea cual sea tu sueño, ¡nosotros lo hacemos realidad!",
+        "Si estás buscando el coche de tus sueños, no busques más allá de AAA Luxury & Sport Rental Car. Somos el concesionario de compra y venta de coches de lujo más importante de España que se dedica a encontrar el vehículo perfecto para ti. Sea cual sea tu sueño, ¡nosotros lo hacemos realidad!",
     },
     form: {
       name: "Nombre*",
@@ -213,7 +213,7 @@ export const messages: Record<Language, Messages> = {
     dream: {
       title: "WE FIND YOUR DREAM CAR",
       description:
-        "If you're looking for your dream car, look no further than Iconic Motor Gallery. We’re one of Spain’s leading luxury car dealerships, dedicated to finding the perfect vehicle for you. Whatever your dream is, we make it real.",
+        "If you're looking for your dream car, look no further than AAA Luxury & Sport Rental Car. We’re one of Spain’s leading luxury car dealerships, dedicated to finding the perfect vehicle for you. Whatever your dream is, we make it real.",
     },
     form: {
       name: "Name*",
